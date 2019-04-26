@@ -7,50 +7,52 @@ type Message struct {
 	ID      int  `json:"id,omitempty"`
 	Success bool `json:"success"`
 
-	Message string      `json:"message,omitempty"`
-	Data    interface{} `json:"data,omitempty"`
+	Text string      `json:"message,omitempty"`
+	Body interface{} `json:"data,omitempty"`
 }
 
 // Request represents a single request over an active connection
 type Request struct {
 	Channel  *io.Channel
 	Endpoint string
+	Message  *Message
 }
 
 // Listen creates a listener on an endpoint
-func Listen(endpoint string, function func(request *Request, clientMessage *Message)) {
+func Listen(endpoint string, function func(request *Request)) {
 	server.On(endpoint, func(channel *io.Channel, clientMessage *Message) {
 		request := new(Request)
 		request.Channel = channel
 		request.Endpoint = endpoint
+		request.Message = clientMessage
 
 		for _, plugin := range Plugins {
-			plugin.PreReceive(request, clientMessage)
+			plugin.PreReceive(request)
 		}
 
-		function(request, clientMessage)
+		function(request)
 
 		for _, plugin := range Plugins {
-			plugin.PostReceive(request, clientMessage)
+			plugin.PostReceive(request)
 		}
 	})
 }
 
 // Respond sends a message back to the client
-func (request Request) Respond(clientMessage *Message, serverMessage *Message) {
+func (request Request) Respond(serverMessage *Message) {
 	channel := request.Channel
 
 	for _, plugin := range Plugins {
-		plugin.PreRespond(&request, clientMessage, serverMessage)
+		plugin.PreRespond(&request, serverMessage)
 	}
 
-	if &clientMessage.ID != nil {
-		serverMessage.ID = clientMessage.ID
+	if &request.Message.ID != nil {
+		serverMessage.ID = request.Message.ID
 	}
 
 	channel.Emit(request.Endpoint, serverMessage)
 
 	for _, plugin := range Plugins {
-		plugin.PostRespond(&request, clientMessage, serverMessage)
+		plugin.PostRespond(&request, serverMessage)
 	}
 }
