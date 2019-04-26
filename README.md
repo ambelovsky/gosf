@@ -56,3 +56,11 @@ func main() {
   socket.emit('echo', { message: 'Hello world.' });
 </script>
 ```
+
+## Original Author
+
+- [Aaron Belovsky](https://github.com/ambelovsky)
+
+## License
+
+MIT
