@@ -42,8 +42,13 @@ func RegisterPlugin(name string, plugin Plugin) {
 
 // Startup activates the framework and starts the server
 func Startup(config map[string]interface{}) {
+	secure := false
 	port := 9999
 	path := "/"
+
+	if config["secure"] != nil {
+		secure = config["secure"].(bool)
+	}
 
 	if config["port"] != nil {
 		port = config["port"].(int)
@@ -51,6 +56,12 @@ func Startup(config map[string]interface{}) {
 
 	if config["path"] != nil {
 		path = config["path"].(string)
+	}
+
+	address := ":" + strconv.Itoa(port)
+
+	if config["host"] != nil {
+		address = config["host"].(string) + address
 	}
 
 	// Activate configured plugins
@@ -72,7 +83,12 @@ func Startup(config map[string]interface{}) {
 	// setup http server
 	serveMux := http.NewServeMux()
 	serveMux.Handle(path, server)
-	log.Panic(http.ListenAndServe(":"+strconv.Itoa(port), serveMux))
+
+	if !secure || config["ssl-cert"] == nil || config["ssl-key"] == nil {
+		log.Panic(http.ListenAndServe(address, serveMux))
+	} else {
+		log.Panic(http.ListenAndServeTLS(address, config["ssl-cert"].(string), config["ssl-key"].(string), serveMux))
+	}
 }
 
 // Shutdown cleanly terminates the framework and its plugins
