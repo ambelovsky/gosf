@@ -10,6 +10,7 @@ import (
 // Config is a global registry for server configurations
 var Config map[string]interface{}
 
+// LoadConfig loads a JSON configuration file into the global Config map
 func LoadConfig(name string, path string) {
 	jsonFile, err := os.Open(path)
 	if err != nil {
