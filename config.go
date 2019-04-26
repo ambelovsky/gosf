@@ -13,8 +13,8 @@ func init() {
 	Config = make(map[string]interface{})
 }
 
-func LoadConfig(name string) {
-	jsonFile, err := os.Open(name + ".json")
+func LoadConfig(name string, path string) {
+	jsonFile, err := os.Open(path)
 	if err != nil {
 		fmt.Println(err)
 	}
