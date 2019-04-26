@@ -18,28 +18,28 @@ The following sample will start a server that responds on an "echo" endpoint and
 package main
 
 import (
-	f "github.com/ambelovsky/gosf"
+  f "github.com/ambelovsky/gosf"
 )
 
 func echo(request *f.Request, clientMessage *f.Message) {
-	response := new(f.Message)
-	response.Success = true
-	response.Message = clientMessage.Message
+  response := new(f.Message)
+  response.Success = true
+  response.Message = clientMessage.Message
 
-	request.Respond(clientMessage, response)
+  request.Respond(clientMessage, response)
 }
 
 func init() {
-	// Load server config file
+  // Load server config file
   f.LoadConfig("server", "server.json")
-  
+
   // Listen on an endpoint
   f.Listen("echo", echo)
 }
 
 func main() {
-	// Start the server using the loaded configuration
-	f.Startup(f.Config["server"].(map[string]interface{}))
+  // Start the server using the loaded configuration
+  f.Startup(f.Config["server"].(map[string]interface{}))
 }
 ```
 
