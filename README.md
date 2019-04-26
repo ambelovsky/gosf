@@ -30,16 +30,14 @@ func echo(request *f.Request, clientMessage *f.Message) {
 }
 
 func init() {
-  // Load server config file
-  f.LoadConfig("server", "server.json")
-
   // Listen on an endpoint
   f.Listen("echo", echo)
 }
 
 func main() {
-  // Start the server using the loaded configuration
-  f.Startup(f.Config["server"].(map[string]interface{}))
+  // Start the server using a basic configuration
+  f.Startup(map[string]interface{}{
+		"port": 9999})
 }
 ```
 
