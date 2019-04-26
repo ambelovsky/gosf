@@ -37,7 +37,7 @@ func init() {
 func main() {
   // Start the server using a basic configuration
   f.Startup(map[string]interface{}{
-		"port": 9999})
+    "port": 9999})
 }
 ```
 
