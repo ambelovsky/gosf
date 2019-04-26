@@ -55,6 +55,11 @@ func main() {
 </script>
 ```
 
+## Documentation
+
+While you're building your API, take some time to build the documentation too!  Check out [github.com/ambelovsky/go-api-docs](https://github.com/ambelovsky/go-api-docs) for an
+easy-to-use documentation system built using the slate theme.
+
 ## Original Author
 
 - [Aaron Belovsky](https://github.com/ambelovsky)
