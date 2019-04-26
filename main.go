@@ -3,6 +3,7 @@ package gosf
 import (
 	"log"
 	"net/http"
+	"reflect"
 	"runtime"
 	"strconv"
 
@@ -51,7 +52,11 @@ func Startup(config map[string]interface{}) {
 	}
 
 	if config["port"] != nil {
-		port = config["port"].(int)
+		if reflect.TypeOf(config["port"]).String() == "float64" {
+			port = int(config["port"].(float64))
+		} else {
+			port = config["port"].(int)
+		}
 	}
 
 	if config["path"] != nil {
