@@ -24,7 +24,7 @@ import (
 func echo(request *f.Request) {
   response := new(f.Message)
   response.Success = true
-  response.Message = request.Message.Text
+  response.Text = request.Message.Text
 
   request.Respond(response)
 }
