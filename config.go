@@ -7,14 +7,10 @@ import (
 	"os"
 )
 
-var Config *map[string]interface{}
+var Config map[string]interface{}
 
 func init() {
-	if App["config"] == nil {
-		App["config"] = make(map[string]interface{})
-	}
-
-	Config = App["config"].(*map[string]interface{})
+	Config = make(map[string]interface{})
 }
 
 func LoadConfig(name string) {
@@ -29,5 +25,5 @@ func LoadConfig(name string) {
 	var data map[string]interface{}
 	json.Unmarshal([]byte(byteValue), &data)
 
-	(*Config)[name] = data
+	Config[name] = data
 }
