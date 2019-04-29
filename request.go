@@ -1,6 +1,10 @@
 package gosf
 
-import io "github.com/ambelovsky/gosf-socketio"
+import (
+	"log"
+
+	io "github.com/ambelovsky/gosf-socketio"
+)
 
 // Message - Standard message type for Socket communications
 type Message struct {
@@ -29,7 +33,7 @@ func Broadcast(room string, endpoint string, message *Message) {
 
 // Listen creates a listener on an endpoint
 func Listen(endpoint string, callback func(request *Request) *Message) {
-	ioServer.On(endpoint, func(channel *io.Channel, clientMessage *Message) Message {
+	ioServer.On(endpoint, func(channel *io.Channel, clientMessage *Message) *Message {
 		client := new(Client)
 		client.Channel = channel
 
@@ -49,7 +53,7 @@ func Listen(endpoint string, callback func(request *Request) *Message) {
 		// Deferred until after return fires so the ack (acknowledgement) has a chance to go back to the client
 		defer emit("after-response", client, request, response)
 
-		return *request.respond(response)
+		return request.respond(response)
 	})
 }
 
@@ -64,6 +68,8 @@ func (request Request) respond(response *Message) *Message {
 
 	emit("before-response", client, &request, response)
 
+	log.Println("t1")
 	client.Channel.Emit(request.Endpoint, response)
+	log.Println("t2")
 	return response
 }
