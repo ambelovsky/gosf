@@ -48,10 +48,10 @@ func Listen(endpoint string, callback func(request *Request) *Message) {
 			response = new(Message)
 		}
 
-		emit("after-request", client, request, response)
+		//emit("after-request", client, request, response)
 
 		// Deferred until after return fires so the ack (acknowledgement) has a chance to go back to the client
-		defer emit("after-response", client, request, response)
+		//defer emit("after-response", client, request, response)
 
 		return request.respond(response)
 	})
@@ -66,7 +66,7 @@ func (request Request) respond(response *Message) *Message {
 		response.ID = request.Message.ID
 	}
 
-	emit("before-response", client, &request, response)
+	//emit("before-response", client, &request, response)
 
 	log.Println("t1")
 	client.Channel.Emit(request.Endpoint, response)
