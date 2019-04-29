@@ -48,9 +48,6 @@ func Listen(endpoint string, callback func(request *Request) *Message) {
 
 		emit("after-request", client, request, response)
 
-		// Deferred until after return fires so the ack (acknowledgement) has a chance to go back to the client
-		defer emit("after-response", client, request, response)
-
 		return request.respond(response)
 	})
 }
@@ -66,6 +63,9 @@ func (request Request) respond(response *Message) *Message {
 
 	emit("before-response", client, &request, response)
 
-	client.Channel.Emit(request.Endpoint, *response)
+	client.Channel.Emit(request.Endpoint, response)
+
+	emit("after-response", client, &request, response)
+
 	return response
 }
