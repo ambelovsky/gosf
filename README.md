@@ -22,12 +22,12 @@ import (
   f "github.com/ambelovsky/gosf"
 )
 
-func echo(request *f.Request) {
+func echo(request *f.Request) *f.Message {
   response := new(f.Message)
   response.Success = true
   response.Text = request.Message.Text
 
-  request.Respond(response)
+  return response
 }
 
 func init() {
