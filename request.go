@@ -41,9 +41,6 @@ func Listen(endpoint string, callback func(client *Client, request *Request) *Me
 		emit("before-request", client, request)
 
 		response := callback(client, request)
-		if response == nil {
-			response = new(Message)
-		}
 
 		emit("after-request", client, request, response)
 
@@ -61,7 +58,10 @@ func (request Request) respond(client *Client, response *Message) *Message {
 
 	emit("before-response", client, &request, response)
 
-	client.Channel.Emit(request.Endpoint, response)
-
-	return response
+	if response != nil {
+		client.Channel.Emit(request.Endpoint, response)
+		return response
+	} else {
+		return nil
+	}
 }
