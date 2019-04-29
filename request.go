@@ -52,18 +52,16 @@ func Listen(endpoint string, callback func(client *Client, request *Request) *Me
 
 // Respond sends a message back to the client
 func (request Request) respond(client *Client, response *Message) *Message {
-	if &request.Message.ID != nil {
-		response.ID = request.Message.ID
-	}
-
 	emit("before-response", client, &request, response)
 
 	if response != nil {
-		client.Channel.Emit(request.Endpoint, response)
-	} else {
-		response = new(Message)
-		response.Success = true
-	}
+		if &request.Message.ID != nil {
+			response.ID = request.Message.ID
+		}
 
-	return response
+		client.Channel.Emit(request.Endpoint, response)
+		return response
+	} else {
+		return nil
+	}
 }
