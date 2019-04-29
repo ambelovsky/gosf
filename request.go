@@ -29,7 +29,7 @@ func Broadcast(room string, endpoint string, message *Message) {
 
 // Listen creates a listener on an endpoint
 func Listen(endpoint string, callback func(request *Request) *Message) {
-	ioServer.On(endpoint, func(channel *io.Channel, clientMessage *Message) *Message {
+	ioServer.On(endpoint, func(channel *io.Channel, clientMessage *Message) Message {
 		client := new(Client)
 		client.Channel = channel
 
@@ -40,10 +40,16 @@ func Listen(endpoint string, callback func(request *Request) *Message) {
 		emit("before-request", client, request)
 
 		response := callback(request)
+		if response == nil {
+			response = new(Message)
+		}
 
 		emit("after-request", client, request, response)
 
-		return request.respond(response)
+		// Deferred until after return fires so the ack (acknowledgement) has a chance to go back to the client
+		defer emit("after-response", client, request, response)
+
+		return *request.respond(response)
 	})
 }
 
@@ -59,8 +65,5 @@ func (request Request) respond(response *Message) *Message {
 	emit("before-response", client, &request, response)
 
 	client.Channel.Emit(request.Endpoint, response)
-
-	emit("after-response", client, request, response)
-
 	return response
 }
