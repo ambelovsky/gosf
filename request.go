@@ -47,7 +47,7 @@ func Listen(endpoint string, callback func(request *Request) *Message) {
 
 		emit("after-request", client, request, response)
 
-		defer emit("after-response", client, &request, response)
+		defer emit("after-response", client, request, response)
 
 		return request.respond(client, response)
 	})
