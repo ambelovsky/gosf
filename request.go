@@ -1,8 +1,6 @@
 package gosf
 
-import (
-	io "github.com/ambelovsky/gosf-socketio"
-)
+import io "github.com/ambelovsky/gosf-socketio"
 
 // Message - Standard message type for Socket communications
 type Message struct {
@@ -20,45 +18,49 @@ type Request struct {
 	Message  *Message
 }
 
+// Broadcast sends a message to connected clients joined to the same room
+func Broadcast(room string, endpoint string, message *Message) {
+	if room != "" {
+		ioServer.BroadcastTo(room, endpoint, message)
+	} else {
+		ioServer.BroadcastToAll(endpoint, message)
+	}
+}
+
 // Listen creates a listener on an endpoint
 func Listen(endpoint string, callback func(request *Request) *Message) {
-	server.On(endpoint, func(channel *io.Channel, clientMessage *Message) *Message {
+	ioServer.On(endpoint, func(channel *io.Channel, clientMessage *Message) *Message {
+		client := new(Client)
+		client.Channel = channel
+
 		request := new(Request)
-		request.Channel = channel
 		request.Endpoint = endpoint
 		request.Message = clientMessage
 
-		for _, plugin := range Plugins {
-			plugin.PreRequest(request)
-		}
+		emit("before-request", client, request)
 
 		response := callback(request)
 
-		for _, plugin := range Plugins {
-			plugin.PostRequest(request, response)
-		}
+		emit("after-request", client, request, response)
 
 		return request.respond(response)
 	})
 }
 
 // Respond sends a message back to the client
-func (request Request) respond(serverMessage *Message) *Message {
-	channel := request.Channel
+func (request Request) respond(response *Message) *Message {
+	client := new(Client)
+	client.Channel = request.Channel
 
-	for _, plugin := range Plugins {
-		plugin.PreResponse(&request, serverMessage)
-	}
+	emit("before-response", client, &request, response)
 
 	if &request.Message.ID != nil {
-		serverMessage.ID = request.Message.ID
+		response.ID = request.Message.ID
 	}
 
-	channel.Emit(request.Endpoint, serverMessage)
+	client.Channel.Emit(request.Endpoint, response)
 
-	for _, plugin := range Plugins {
-		plugin.PostResponse(&request, serverMessage)
-	}
+	emit("after-response", client, &request, response)
 
-	return serverMessage
+	return response
 }

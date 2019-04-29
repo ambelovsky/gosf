@@ -11,11 +11,11 @@ import (
 )
 
 // SocketIO Server
-var server *io.Server
+var ioServer *io.Server
 
 func init() {
 	// SocketIO Server
-	server = io.NewServer(transport.GetDefaultWebsocketTransport())
+	ioServer = io.NewServer(transport.GetDefaultWebsocketTransport())
 }
 
 // Startup activates the framework and starts the server
@@ -72,31 +72,31 @@ func Shutdown() {
 
 func startConnectionHandlers() {
 	// Handle connected
-	server.On(io.OnConnection, func(channel *io.Channel) {
+	ioServer.On(io.OnConnection, func(channel *io.Channel) {
+		client := new(Client)
+		client.Channel = channel
+
 		request := new(Request)
 		request.Endpoint = "connect"
-		request.Channel = channel
 
-		for _, plugin := range Plugins {
-			plugin.Connect(request)
-		}
+		emit("connect", client, request)
 	})
 
 	// Handle disconnected
-	server.On(io.OnDisconnection, func(channel *io.Channel) {
+	ioServer.On(io.OnDisconnection, func(channel *io.Channel) {
+		client := new(Client)
+		client.Channel = channel
+
 		request := new(Request)
 		request.Endpoint = "disconnect"
-		request.Channel = channel
 
-		for _, plugin := range Plugins {
-			plugin.Disconnect(request)
-		}
+		emit("disconnect", client, request)
 	})
 }
 
 func startHTTPServer(config map[string]interface{}, secure bool, address string, port int, path string) {
 	serveMux := http.NewServeMux()
-	serveMux.Handle(path, server)
+	serveMux.Handle(path, ioServer)
 
 	if !secure || config["ssl-cert"] == nil || config["ssl-key"] == nil {
 		log.Panic(http.ListenAndServe(address, serveMux))

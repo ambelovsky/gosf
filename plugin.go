@@ -7,14 +7,6 @@ var Plugins map[string]Plugin
 type Plugin interface {
 	Activate(app *map[string]interface{}, config *map[string]interface{})
 	Deactivate(app *map[string]interface{}, config *map[string]interface{})
-
-	Connect(request *Request)
-	Disconnect(request *Request)
-
-	PreRequest(request *Request)
-	PostRequest(request *Request, response *Message)
-	PreResponse(request *Request, response *Message)
-	PostResponse(request *Request, response *Message)
 }
 
 // RegisterPlugin registers a plugin for activation in the system
