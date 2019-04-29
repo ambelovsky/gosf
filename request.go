@@ -15,7 +15,6 @@ type Message struct {
 
 // Request represents a single request over an active connection
 type Request struct {
-	Channel  *io.Channel
 	Endpoint string
 	Message  *Message
 }
@@ -48,15 +47,14 @@ func Listen(endpoint string, callback func(request *Request) *Message) {
 
 		emit("after-request", client, request, response)
 
-		return request.respond(response)
+		defer emit("after-response", client, &request, response)
+
+		return request.respond(client, response)
 	})
 }
 
 // Respond sends a message back to the client
-func (request Request) respond(response *Message) *Message {
-	client := new(Client)
-	client.Channel = request.Channel
-
+func (request Request) respond(client *Client, response *Message) *Message {
 	if &request.Message.ID != nil {
 		response.ID = request.Message.ID
 	}
@@ -64,8 +62,6 @@ func (request Request) respond(response *Message) *Message {
 	emit("before-response", client, &request, response)
 
 	client.Channel.Emit(request.Endpoint, response)
-
-	emit("after-response", client, &request, response)
 
 	return response
 }
