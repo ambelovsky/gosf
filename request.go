@@ -29,7 +29,7 @@ func Broadcast(room string, endpoint string, message *Message) {
 }
 
 // Listen creates a listener on an endpoint
-func Listen(endpoint string, callback func(request *Request) *Message) {
+func Listen(endpoint string, callback func(client *Client, request *Request) *Message) {
 	ioServer.On(endpoint, func(channel *io.Channel, clientMessage *Message) *Message {
 		client := new(Client)
 		client.Channel = channel
@@ -40,7 +40,7 @@ func Listen(endpoint string, callback func(request *Request) *Message) {
 
 		emit("before-request", client, request)
 
-		response := callback(request)
+		response := callback(client, request)
 		if response == nil {
 			response = new(Message)
 		}
