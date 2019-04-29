@@ -60,8 +60,10 @@ func (request Request) respond(client *Client, response *Message) *Message {
 
 	if response != nil {
 		client.Channel.Emit(request.Endpoint, response)
-		return response
 	} else {
-		return nil
+		response = new(Message)
+		response.Success = true
 	}
+
+	return response
 }
