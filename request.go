@@ -1,6 +1,8 @@
 package gosf
 
-import io "github.com/ambelovsky/gosf-socketio"
+import (
+	io "github.com/ambelovsky/gosf-socketio"
+)
 
 // Message - Standard message type for Socket communications
 type Message struct {
@@ -19,31 +21,33 @@ type Request struct {
 }
 
 // Listen creates a listener on an endpoint
-func Listen(endpoint string, function func(request *Request)) {
-	server.On(endpoint, func(channel *io.Channel, clientMessage *Message) {
+func Listen(endpoint string, callback func(request *Request) *Message) {
+	server.On(endpoint, func(channel *io.Channel, clientMessage *Message) *Message {
 		request := new(Request)
 		request.Channel = channel
 		request.Endpoint = endpoint
 		request.Message = clientMessage
 
 		for _, plugin := range Plugins {
-			plugin.PreReceive(request)
+			plugin.PreRequest(request)
 		}
 
-		function(request)
+		response := callback(request)
 
 		for _, plugin := range Plugins {
-			plugin.PostReceive(request)
+			plugin.PostRequest(request, response)
 		}
+
+		return request.respond(response)
 	})
 }
 
 // Respond sends a message back to the client
-func (request Request) Respond(serverMessage *Message) {
+func (request Request) respond(serverMessage *Message) *Message {
 	channel := request.Channel
 
 	for _, plugin := range Plugins {
-		plugin.PreRespond(&request, serverMessage)
+		plugin.PreResponse(&request, serverMessage)
 	}
 
 	if &request.Message.ID != nil {
@@ -53,6 +57,8 @@ func (request Request) Respond(serverMessage *Message) {
 	channel.Emit(request.Endpoint, serverMessage)
 
 	for _, plugin := range Plugins {
-		plugin.PostRespond(&request, serverMessage)
+		plugin.PostResponse(&request, serverMessage)
 	}
+
+	return serverMessage
 }

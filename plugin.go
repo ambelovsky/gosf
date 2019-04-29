@@ -11,10 +11,10 @@ type Plugin interface {
 	Connect(request *Request)
 	Disconnect(request *Request)
 
-	PreReceive(request *Request)
-	PostReceive(request *Request)
-	PreRespond(request *Request, serverMessage *Message)
-	PostRespond(request *Request, serverMessage *Message)
+	PreRequest(request *Request)
+	PostRequest(request *Request, response *Message)
+	PreResponse(request *Request, response *Message)
+	PostResponse(request *Request, response *Message)
 }
 
 // RegisterPlugin registers a plugin for activation in the system
