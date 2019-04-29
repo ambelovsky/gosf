@@ -43,7 +43,6 @@ func Listen(endpoint string, callback func(request *Request) *Message) {
 
 		emit("after-request", client, request, response)
 
-		defer emit("after-response", client, request, response)
 		return request.respond(response)
 	})
 }
@@ -53,13 +52,15 @@ func (request Request) respond(response *Message) *Message {
 	client := new(Client)
 	client.Channel = request.Channel
 
-	emit("before-response", client, &request, response)
-
 	if &request.Message.ID != nil {
 		response.ID = request.Message.ID
 	}
 
+	emit("before-response", client, &request, response)
+
 	client.Channel.Emit(request.Endpoint, response)
+
+	emit("after-response", client, request, response)
 
 	return response
 }
