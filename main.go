@@ -14,8 +14,12 @@ import (
 var ioServer *io.Server
 
 func init() {
+	// Transport configuration
+	transport := transport.GetDefaultWebsocketTransport()
+	transport.UnsecureTLS = true
+
 	// SocketIO Server
-	ioServer = io.NewServer(transport.GetDefaultWebsocketTransport())
+	ioServer = io.NewServer(transport)
 }
 
 // Startup activates the framework and starts the server
