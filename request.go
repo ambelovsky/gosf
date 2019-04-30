@@ -21,18 +21,20 @@ type Request struct {
 
 // Broadcast sends a message to connected clients joined to the same room
 func Broadcast(room string, endpoint string, message *Message) {
+	emit("before-broadcast", room, endpoint, message)
 	if room != "" {
 		ioServer.BroadcastTo(room, endpoint, message)
 	} else {
 		ioServer.BroadcastToAll(endpoint, message)
 	}
+	emit("after-broadcast", room, endpoint, message)
 }
 
 // Listen creates a listener on an endpoint
 func Listen(endpoint string, callback func(client *Client, request *Request) *Message) {
 	ioServer.On(endpoint, func(channel *io.Channel, clientMessage *Message) *Message {
 		client := new(Client)
-		client.Channel = channel
+		client.channel = channel
 
 		request := new(Request)
 		request.Endpoint = endpoint
@@ -59,7 +61,7 @@ func (request Request) respond(client *Client, response *Message) *Message {
 			response.ID = request.Message.ID
 		}
 
-		client.Channel.Emit(request.Endpoint, response)
+		client.channel.Emit(request.Endpoint, response)
 		return response
 	} else {
 		return nil

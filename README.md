@@ -46,7 +46,7 @@ func main() {
 <script>
   var socket = io.connect('ws://localhost:9999', { transports: ['websocket'] });
 
-  socket.emit('echo', { message: 'Hello world.' }, function(response) {
+  socket.emit('echo', { text: 'Hello world.' }, function(response) {
     console.log(response);
   });
 </script>

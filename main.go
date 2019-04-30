@@ -74,7 +74,7 @@ func startConnectionHandlers() {
 	// Handle connected
 	ioServer.On(io.OnConnection, func(channel *io.Channel) {
 		client := new(Client)
-		client.Channel = channel
+		client.channel = channel
 
 		request := new(Request)
 		request.Endpoint = "connect"
@@ -85,7 +85,7 @@ func startConnectionHandlers() {
 	// Handle disconnected
 	ioServer.On(io.OnDisconnection, func(channel *io.Channel) {
 		client := new(Client)
-		client.Channel = channel
+		client.channel = channel
 
 		request := new(Request)
 		request.Endpoint = "disconnect"
