@@ -42,7 +42,7 @@ func main() {
 
 ### Client
 ```html
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.slim.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.slim.js"></script>
 <script>
   var socket = io.connect('ws://localhost:9999', { transports: ['websocket'] });
 
@@ -54,7 +54,7 @@ func main() {
 
 ## Learn More
 
-Discover more about GOSF at [gosf.io](http://gosf.io).
+Discover more about GOSF with the complete documentation at [gosf.io](http://gosf.io).
 
 ## Documenting Your API
 
@@ -63,7 +63,7 @@ easy-to-use documentation system built using the slate theme.
 
 ## Original Author
 
-- [Aaron Belovsky](https://github.com/ambelovsky)
+[Aaron Belovsky](https://github.com/ambelovsky) is a senior technologist, avid open source contributor, and author of GOSF.
 
 ## License
 
