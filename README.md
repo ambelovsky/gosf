@@ -22,17 +22,15 @@ import (
   f "github.com/ambelovsky/gosf"
 )
 
-func echo(client *f.Client, request *f.Request) *f.Message {
-  response := new(f.Message)
-  response.Success = true
-  response.Text = request.Message.Text
-
-  return response
-}
-
 func init() {
   // Listen on an endpoint
-  f.Listen("echo", echo)
+  f.Listen("echo", func(client *f.Client, request *f.Request) *f.Message {
+    response := new(f.Message)
+    response.Success = true
+    response.Text = request.Message.Text
+
+    return response
+  })
 }
 
 func main() {
@@ -48,11 +46,9 @@ func main() {
 <script>
   var socket = io.connect('ws://localhost:9999', { transports: ['websocket'] });
 
-  socket.on('echo', function(response) {
+  socket.emit('echo', { message: 'Hello world.' }, function(response) {
     console.log(response);
   });
-
-  socket.emit('echo', { message: 'Hello world.' });
 </script>
 ```
 
