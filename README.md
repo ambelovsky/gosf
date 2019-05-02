@@ -1,5 +1,9 @@
-# gosf
-GoLang SocketIO Framework or GOSF is an easy-to-use framework for developing SocketIO API's in GoLang. An example server to help you get started can be found at [github.com/ambelovsky/gosf-sample-app](https://github.com/ambelovsky/gosf-sample-app).
+# GoLang Socket.IO Framework (GOSF)
+GoLang SocketIO Framework or GOSF is an easy-to-use framework for developing SocketIO API's in GoLang.
+
+**Supports Socket.IO Version 2**
+
+An example server to help you get started can be found at [github.com/ambelovsky/gosf-sample-app](https://github.com/ambelovsky/gosf-sample-app).
 
 For an in-depth look at the API Framework, check us out at [gosf.io](http://gosf.io).
 
