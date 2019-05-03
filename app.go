@@ -9,7 +9,7 @@ import (
 type AppSettings struct {
 	Env     map[string]string
 	Config  map[string]interface{}
-	Plugins map[string]*interface{}
+	Plugins map[string]interface{}
 }
 
 // App is a global registry for application variables
