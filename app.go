@@ -1,7 +1,6 @@
 package gosf
 
 import (
-	"log"
 	"os"
 	"strings"
 )
@@ -23,9 +22,5 @@ func init() {
 	for _, e := range os.Environ() {
 		pair := strings.Split(e, "=")
 		App.Env[pair[0]] = pair[1]
-	}
-
-	for k, v := range App.Env {
-		log.Println("Registered env var name " + k + " with value " + v)
 	}
 }
