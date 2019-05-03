@@ -1,6 +1,7 @@
 package gosf
 
 import (
+	"log"
 	"os"
 	"strings"
 )
@@ -18,8 +19,13 @@ func init() {
 	App = new(AppSettings)
 	App.Env = make(map[string]string)
 
+	log.Println("Hello world...")
+
 	// Parse environmental variables
 	for _, e := range os.Environ() {
+		log.Println("found one")
+		log.Println(e)
+
 		pair := strings.Split(e, "=")
 		App.Env[pair[0]] = pair[1]
 	}
