@@ -2,7 +2,6 @@ package gosf
 
 import (
 	"os"
-	"reflect"
 	"strings"
 )
 
@@ -10,7 +9,7 @@ import (
 type AppSettings struct {
 	Env     map[string]string
 	Config  map[string]interface{}
-	Plugins map[string]reflect.Value
+	Plugins map[string]interface{}
 }
 
 // App is a global registry for application variables
