@@ -1,9 +1,13 @@
 package gosf
 
-type plugins map[string]Plugin
+type plugins map[string]struct {
+	activation Plugin
+}
 
 func init() {
-	App.Plugins = make(map[string]Plugin)
+	App.Plugins = make(map[string]struct {
+		activation Plugin
+	})
 }
 
 // Plugin is the framework interface defining a plugin
@@ -13,6 +17,8 @@ type Plugin interface {
 }
 
 // RegisterPlugin registers a plugin for activation in the system
-func RegisterPlugin(name string, plugin Plugin) {
+func RegisterPlugin(name string, plugin struct {
+	activation Plugin
+}) {
 	App.Plugins[name] = plugin
 }
