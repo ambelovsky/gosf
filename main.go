@@ -56,7 +56,7 @@ func Startup(config map[string]interface{}) {
 
 	// Activate configured plugins
 	for _, plugin := range plugins {
-		plugin.Activate(App)
+		plugin.Activate(&App)
 	}
 
 	// Start connection handlers
@@ -70,7 +70,7 @@ func Startup(config map[string]interface{}) {
 func Shutdown() {
 	// Deactivate configured plugins
 	for _, plugin := range plugins {
-		plugin.Deactivate(App)
+		plugin.Deactivate(&App)
 	}
 }
 

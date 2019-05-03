@@ -12,10 +12,10 @@ type AppSettings struct {
 }
 
 // App is a global registry for application variables
-var App *AppSettings
+var App AppSettings
 
 func init() {
-	App = new(AppSettings)
+	App = *new(AppSettings)
 	App.Env = make(map[string]string)
 
 	// Parse environmental variables
