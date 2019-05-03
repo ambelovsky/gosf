@@ -9,8 +9,8 @@ type Message struct {
 	ID      int  `json:"id,omitempty"`
 	Success bool `json:"success"`
 
-	Text string      `json:"text,omitempty"`
-	Body interface{} `json:"body,omitempty"`
+	Text string                 `json:"text,omitempty"`
+	Body map[string]interface{} `json:"body,omitempty"`
 }
 
 // Request represents a single request over an active connection
