@@ -18,7 +18,7 @@ var plugins map[string]*pluginRegistration
 
 func init() {
 	plugins = make(map[string]*pluginRegistration)
-	App.Plugins = make(map[string]interface{})
+	App.Plugins = make(map[string]reflect.Value)
 }
 
 // RegisterPlugin is used by the plugin to register itself for later activation
