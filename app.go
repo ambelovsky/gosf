@@ -7,9 +7,8 @@ import (
 
 // AppSettings holds global settings for the application
 type AppSettings struct {
-	Env     map[string]string
-	Config  map[string]interface{}
-	Plugins map[string]interface{}
+	Env    map[string]string
+	Config map[string]interface{}
 }
 
 // App is a global registry for application variables

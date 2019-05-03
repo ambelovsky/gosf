@@ -8,9 +8,7 @@ type Plugin interface {
 
 var plugins []Plugin
 
-func init() {
-	App.Plugins = make(map[string]interface{})
-}
+func init() {}
 
 // RegisterPlugin is used by the plugin to register itself for later activation
 func RegisterPlugin(plugin Plugin) {
