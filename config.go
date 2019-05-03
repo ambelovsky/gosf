@@ -7,8 +7,6 @@ import (
 	"os"
 )
 
-type config map[string]interface{}
-
 func init() {
 	App.Config = make(map[string]interface{})
 }

@@ -1,14 +1,7 @@
 package gosf
 
-type plugins map[string]struct {
-	activation Plugin
-}
-
-func init() {
-	App.Plugins = make(map[string]struct {
-		activation Plugin
-	})
-}
+// System plugin activators
+var plugins map[string]*Plugin
 
 // Plugin is the framework interface defining a plugin
 type Plugin interface {
@@ -16,9 +9,13 @@ type Plugin interface {
 	Deactivate(app *AppSettings)
 }
 
+func init() {
+	plugins = make(map[string]*Plugin)
+	App.Plugins = make(map[string]*interface{})
+}
+
 // RegisterPlugin registers a plugin for activation in the system
-func RegisterPlugin(name string, plugin struct {
-	activation Plugin
-}) {
-	App.Plugins[name] = plugin
+func RegisterPlugin(name string, plugin *Plugin, appMethods *interface{}) {
+	plugins[name] = plugin
+	App.Plugins[name] = appMethods
 }
