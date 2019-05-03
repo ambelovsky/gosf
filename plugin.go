@@ -6,16 +6,13 @@ type Plugin interface {
 	Deactivate(app *AppSettings)
 }
 
-var plugins []*Plugin
+var plugins []Plugin
 
 func init() {
 	App.Plugins = make(map[string]interface{})
 }
 
 // RegisterPlugin is used by the plugin to register itself for later activation
-func RegisterPlugin(plugin *Plugin) {
-	registration := new(Plugin)
-	registration = plugin
-
-	plugins = append(plugins, registration)
+func RegisterPlugin(plugin Plugin) {
+	plugins = append(plugins, plugin)
 }
