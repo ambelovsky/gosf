@@ -1,9 +1,11 @@
 package gosf
 
+import "reflect"
+
 type pluginRegistration struct {
 	active     bool
 	plugin     Plugin
-	appMethods interface{}
+	appMethods reflect.Value
 }
 
 // Plugin is the framework interface defining a plugin
@@ -24,7 +26,7 @@ func RegisterPlugin(name string, plugin Plugin, appMethods interface{}) {
 	plugins[name] = new(pluginRegistration)
 	plugins[name].active = false
 	plugins[name].plugin = plugin
-	plugins[name].appMethods = appMethods
+	plugins[name].appMethods = reflect.ValueOf(appMethods)
 }
 
 // LoadPlugin activates a registered plugin
@@ -34,5 +36,5 @@ func LoadPlugin(systemName string, referenceName string) {
 	}
 
 	plugins[systemName].active = true
-	App.Plugins[referenceName] = plugins[systemName].appMethods
+	App.Plugins[referenceName] = reflect.ValueOf(plugins[systemName].appMethods)
 }
