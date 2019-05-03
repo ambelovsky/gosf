@@ -63,7 +63,6 @@ func (request Request) respond(client *Client, response *Message) *Message {
 
 		client.channel.Emit(request.Endpoint, response)
 		return response
-	} else {
-		return nil
 	}
+	return nil
 }
