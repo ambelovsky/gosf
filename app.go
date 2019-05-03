@@ -15,7 +15,6 @@ type AppSettings struct {
 var App AppSettings
 
 func init() {
-	App = *new(AppSettings)
 	App.Env = make(map[string]string)
 
 	// Parse environmental variables
