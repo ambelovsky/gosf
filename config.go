@@ -7,8 +7,11 @@ import (
 	"os"
 )
 
-// Config is a global registry for server configurations
-var Config map[string]interface{}
+type config map[string]interface{}
+
+func init() {
+	App.Config = make(map[string]interface{})
+}
 
 // LoadConfig loads a JSON configuration file into the global Config map
 func LoadConfig(name string, path string) {
@@ -23,9 +26,5 @@ func LoadConfig(name string, path string) {
 	var data map[string]interface{}
 	json.Unmarshal([]byte(byteValue), &data)
 
-	Config[name] = data
-}
-
-func init() {
-	Config = make(map[string]interface{})
+	App.Config[name] = data
 }
