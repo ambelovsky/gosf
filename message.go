@@ -30,7 +30,7 @@ func (m *Message) WithoutMeta() *Message {
 }
 
 // NewSuccessMessage generates a success message
-func NewSuccessMessage(text string, body *interface{}) *Message {
+func NewSuccessMessage(text string, body interface{}) *Message {
 	m := new(Message)
 
 	m.Success = true
@@ -42,10 +42,10 @@ func NewSuccessMessage(text string, body *interface{}) *Message {
 	return m
 }
 
-func convertToJSONMap(data *interface{}) map[string]interface{} {
+func convertToJSONMap(data interface{}) map[string]interface{} {
 	jsonMap := make(map[string]interface{})
 
-	arg := reflect.ValueOf(*data).Elem()
+	arg := reflect.ValueOf(data).Elem()
 	for j := 0; j < arg.NumField(); j++ {
 		value := arg.Field(j).Interface()
 		valueType := arg.Field(j).Kind()
