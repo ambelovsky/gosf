@@ -45,7 +45,7 @@ func NewSuccessMessage(text string, body interface{}) *Message {
 func convertToJSONMap(data interface{}) map[string]interface{} {
 	jsonMap := make(map[string]interface{})
 
-	arg := reflect.ValueOf(data).Elem()
+	arg := reflect.ValueOf(data)
 	for j := 0; j < arg.NumField(); j++ {
 		value := arg.Field(j).Interface()
 		valueType := arg.Field(j).Kind()
