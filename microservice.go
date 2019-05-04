@@ -58,6 +58,11 @@ func (m *Microservice) Disconnect() {
 	m.client.Close()
 }
 
+// Listen registers and event handler for a microservice endpoint
+func (m *Microservice) Listen(endpoint string, callback func(message *Message)) {
+	m.client.On(endpoint, callback)
+}
+
 // Call sends a request to the microservice
 func (m *Microservice) Call(endpoint string, message *Message) (*Message, error) {
 	msResponse := new(Message)
