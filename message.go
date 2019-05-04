@@ -55,9 +55,9 @@ func convertToJSONMap(data interface{}) map[string]interface{} {
 		}
 
 		name := arg.Type().Field(j).Name
-		for k, v := range name {
-			name = string(unicode.ToLower(v)) + name[k+1:]
-		}
+		nameBytes := []byte(name)
+		nameBytes[0] = byte(unicode.ToLower(rune(nameBytes[0])))
+		name = string(nameBytes)
 
 		tag := arg.Type().Field(j).Tag.Get("json")
 		if tag != "" {
