@@ -29,8 +29,8 @@ func (m *Message) WithoutMeta() *Message {
 	return metaFreeMessage
 }
 
-// GenSuccess generates a success message
-func (*Message) GenSuccess(text string, body *interface{}) *Message {
+// NewSuccessMessage generates a success message
+func NewSuccessMessage(text string, body *interface{}) *Message {
 	m := new(Message)
 
 	m.Success = true
