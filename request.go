@@ -4,29 +4,6 @@ import (
 	io "github.com/ambelovsky/gosf-socketio"
 )
 
-// Message - Standard message type for Socket communications
-type Message struct {
-	ID int `json:"id,omitempty"`
-
-	Success bool   `json:"success"`
-	Text    string `json:"text,omitempty"`
-
-	Meta map[string]interface{} `json:"meta,omitempty"`
-	Body map[string]interface{} `json:"body,omitempty"`
-}
-
-// WithoutMeta removes meta information before returning a copy of the message
-func (m *Message) WithoutMeta() *Message {
-	if m.Meta == nil {
-		return m
-	}
-
-	var metaFreeMessage = new(Message)
-	(*metaFreeMessage) = *m
-	metaFreeMessage.Meta = nil
-	return metaFreeMessage
-}
-
 // Request represents a single request over an active connection
 type Request struct {
 	Endpoint string
