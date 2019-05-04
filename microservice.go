@@ -2,6 +2,7 @@ package gosf
 
 import (
 	"encoding/json"
+	"time"
 
 	io "github.com/ambelovsky/gosf-socketio"
 	transport "github.com/ambelovsky/gosf-socketio/transport"
@@ -56,7 +57,9 @@ func (m *Microservice) Disconnect() {
 func (m *Microservice) Call(endpoint string, message Message) (*Message, error) {
 	msResponse := new(Message)
 
-	if raw, err := m.client.Ack(endpoint, message, 2000); err != nil {
+	if duration, err := time.ParseDuration("2s"); err != nil {
+		return nil, err
+	} else if raw, err := m.client.Ack(endpoint, message, duration); err != nil {
 		return nil, err
 	} else if err := json.Unmarshal([]byte(raw), msResponse); err != nil {
 		return nil, err
