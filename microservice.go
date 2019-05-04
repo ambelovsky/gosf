@@ -12,6 +12,7 @@ func init() {
 	App.Microservices = make(map[string]*Microservice)
 }
 
+// Microservice represents a microservice connection
 type Microservice struct {
 	host      string
 	port      int
@@ -29,6 +30,7 @@ func (m *Microservice) configure(host string, port int, secure bool) *Microservi
 	return m
 }
 
+// Connected tells whether or not this microservice's connection is still active and alive
 func (m *Microservice) Connected() bool {
 	if m.client == nil {
 		return false
@@ -36,6 +38,7 @@ func (m *Microservice) Connected() bool {
 	return m.client.IsAlive()
 }
 
+// Connect manually connects or reconnects to the microservice
 func (m *Microservice) Connect() (*Microservice, error) {
 	if m.Connected() {
 		m.Disconnect()
@@ -47,6 +50,7 @@ func (m *Microservice) Connect() (*Microservice, error) {
 	return m, err
 }
 
+// Disconnect manually terminates the connection to the microservice
 func (m *Microservice) Disconnect() {
 	if m.Connected() == false {
 		return
@@ -54,7 +58,8 @@ func (m *Microservice) Disconnect() {
 	m.client.Close()
 }
 
-func (m *Microservice) Call(endpoint string, message Message) (*Message, error) {
+// Call sends a request to the microservice
+func (m *Microservice) Call(endpoint string, message *Message) (*Message, error) {
 	msResponse := new(Message)
 
 	if duration, err := time.ParseDuration("2s"); err != nil {
@@ -68,6 +73,7 @@ func (m *Microservice) Call(endpoint string, message Message) (*Message, error) 
 	return msResponse, nil
 }
 
+// RegisterMicroservice configures, automatically connects, and adds the microservice to App.Microservices
 func RegisterMicroservice(name string, host string, port int, secure bool) {
 	App.Microservices[name] = new(Microservice)
 	App.Microservices[name].configure(host, port, secure)
