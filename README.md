@@ -29,11 +29,7 @@ import (
 func init() {
   // Listen on an endpoint
   f.Listen("echo", func(client *f.Client, request *f.Request) *f.Message {
-    response := new(f.Message)
-    response.Success = true
-    response.Text = request.Message.Text
-
-    return response
+    return f.NewSuccessMessage(request.Message.Text)
   })
 }
 
