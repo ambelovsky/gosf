@@ -1,7 +1,7 @@
 package gosf
 
 import (
-	"github.com/fatih/structs"
+	"github.com/ambelovsky/go-structs"
 	"github.com/mitchellh/mapstructure"
 )
 
