@@ -7,7 +7,9 @@ import (
 
 // StructToMap converts the given structure into a map[string]interface{}
 func StructToMap(input interface{}) map[string]interface{} {
-	return structs.Map(input)
+	s := structs.New(input)
+	s.TagName = "json"
+	return s.Map()
 }
 
 // MapToStruct converts the given map[string]interface{} into a struct
