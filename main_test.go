@@ -8,6 +8,26 @@ import (
 	"github.com/ambelovsky/gosf"
 )
 
+// MyPlugin is the aspect oriented element required by the modular plugin framework
+type MyPlugin struct{}
+
+// Activate is an aspect-oriented modular plugin requirement
+func (p MyPlugin) Activate(app *gosf.AppSettings) {}
+
+// Deactivate is an aspect-oriented modular plugin requirement
+func (p MyPlugin) Deactivate(app *gosf.AppSettings) {}
+
+func TestRegisterPlugin(t *testing.T) {
+	log.Println(t.Name())
+	defer func() {
+		err := recover()
+		if err != nil {
+			t.Error("Unable to register plugin.")
+		}
+	}()
+	gosf.RegisterPlugin(new(MyPlugin))
+}
+
 func endpointEcho(client *gosf.Client, request *gosf.Request) *gosf.Message {
 	return gosf.NewSuccessMessage(request.Message.Text, nil)
 }
