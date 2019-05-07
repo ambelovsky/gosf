@@ -79,8 +79,9 @@ func (m *Microservice) Call(endpoint string, message *Message) (*Message, error)
 }
 
 // RegisterMicroservice configures, automatically connects, and adds the microservice to App.Microservices
-func RegisterMicroservice(name string, host string, port int, secure bool) {
+func RegisterMicroservice(name string, host string, port int, secure bool) error {
 	App.Microservices[name] = new(Microservice)
 	App.Microservices[name].configure(host, port, secure)
-	go App.Microservices[name].Connect()
+	_, err := App.Microservices[name].Connect()
+	return err
 }
