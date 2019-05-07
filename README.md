@@ -13,6 +13,16 @@ For an in-depth look at the API Framework, check us out at [gosf.io](http://gosf
 go get -u "github.com/ambelovsky/gosf"
 ```
 
+## Features
+
+* Socket.IO v2 Support
+* Request/Response Acknowledgement-Based Cycle
+* Broadcast/Room Support
+* Microservices Using Socket.IO
+* Plugable Architecture
+* App, Client, and Request Contexts
+* Standardized Message Format
+
 ## Quick Start
 
 The following sample will start a server that responds on an "echo" endpoint and return the same message received from the client back to the client.
