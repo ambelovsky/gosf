@@ -93,7 +93,7 @@ func RegisterMicroservice(name string, host string, port int, secure bool) error
 }
 
 // DeregisterMicroservice disconnects and removes a microservice from App.Microservices
-func DeregisterMicroservice(name string, host string, port int, secure bool) {
+func DeregisterMicroservice(name string) {
 	App.Microservices[name].Disconnect()
 	delete(App.Microservices, name)
 }
