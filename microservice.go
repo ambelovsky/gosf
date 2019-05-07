@@ -78,6 +78,12 @@ func (m *Microservice) Call(endpoint string, message *Message) (*Message, error)
 	return msResponse, nil
 }
 
+// Lob sends a request to the microservice that does not require a response
+func (m *Microservice) Lob(endpoint string, message *Message) error {
+	err := m.client.Emit(endpoint, message)
+	return err
+}
+
 // RegisterMicroservice configures, automatically connects, and adds the microservice to App.Microservices
 func RegisterMicroservice(name string, host string, port int, secure bool) error {
 	App.Microservices[name] = new(Microservice)
