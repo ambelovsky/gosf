@@ -97,3 +97,11 @@ func DeregisterMicroservice(name string) {
 	App.Microservices[name].Disconnect()
 	delete(App.Microservices, name)
 }
+
+// GetMicroservice retrieves a microservice reference from App.Microservices
+func GetMicroservice(name string) *Microservice {
+	if microservice, ok := App.Microservices[name]; ok {
+		return microservice
+	}
+	return nil
+}

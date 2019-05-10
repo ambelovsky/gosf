@@ -26,3 +26,11 @@ func LoadConfig(name string, path string) {
 
 	App.Config[name] = data
 }
+
+// GetConfig returns a configuration from App.Config
+func GetConfig(name string) interface{} {
+	if config, ok := App.Config[name]; ok {
+		return config
+	}
+	return nil
+}

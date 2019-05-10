@@ -79,19 +79,24 @@ func TestCallMicroserviceMessage(t *testing.T) {
 	defer func() {
 		err := recover()
 		if err != nil {
-			t.Error("Echo endpoint could not be called successfully.")
+			t.Error("echo endpoint could not be called successfully")
 		}
 	}()
 
 	input := NewSuccessMessage("Hello world.", nil)
-	response, err := App.Microservices["utils"].Call("echo", input)
+
+	ms := GetMicroservice("utils")
+	if ms == nil {
+		panic("no microservice was returned by GetMicroservice")
+	}
+	response, err := ms.Call("echo", input)
 
 	if err != nil {
 		panic(err)
 	}
 
 	if response.Text == "" || response.Text != "Hello world." {
-		panic("Response text did not return as expected.")
+		panic("response text did not return as expected")
 	}
 }
 
