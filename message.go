@@ -24,10 +24,31 @@ func (m *Message) WithoutMeta() *Message {
 }
 
 // NewSuccessMessage generates a success message
-func NewSuccessMessage(text string, body map[string]interface{}) *Message {
+func NewSuccessMessage(args ...interface{}) *Message {
 	m := new(Message)
 
 	m.Success = true
+
+	var text = ""
+	var body = map[string]interface{}(nil)
+
+	for i, p := range args {
+		switch i {
+		case 0: // text
+			param, ok := p.(string)
+			if !ok {
+				break
+			}
+			text = param
+		case 1: // body
+			param, ok := p.(map[string]interface{})
+			if !ok {
+				break
+			}
+			body = param
+		}
+	}
+
 	if text != "" {
 		m.Text = text
 	}
@@ -37,13 +58,35 @@ func NewSuccessMessage(text string, body map[string]interface{}) *Message {
 }
 
 // NewFailureMessage generates a failure message
-func NewFailureMessage(text string) *Message {
+func NewFailureMessage(args ...interface{}) *Message {
 	m := new(Message)
 
 	m.Success = false
+
+	var text = ""
+	var body = map[string]interface{}(nil)
+
+	for i, p := range args {
+		switch i {
+		case 0: // text
+			param, ok := p.(string)
+			if !ok {
+				break
+			}
+			text = param
+		case 1: // body
+			param, ok := p.(map[string]interface{})
+			if !ok {
+				break
+			}
+			body = param
+		}
+	}
+
 	if text != "" {
 		m.Text = text
 	}
+	m.Body = body
 
 	return m
 }
