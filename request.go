@@ -32,11 +32,8 @@ func Listen(endpoint string, callback func(client *Client, request *Request) *Me
 		request.Message = clientMessage
 
 		emit("before-request", client, request)
-
 		response := callback(client, request)
-
 		emit("after-request", client, request, response)
-
 		defer emit("after-response", client, request, response)
 
 		return request.respond(client, response)

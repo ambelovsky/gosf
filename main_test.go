@@ -2,6 +2,7 @@ package gosf
 
 import (
 	"log"
+	"strconv"
 	"testing"
 	"time"
 )
@@ -79,17 +80,28 @@ func TestCallMicroserviceMessage(t *testing.T) {
 	defer func() {
 		err := recover()
 		if err != nil {
+			log.Println(err)
 			t.Error("echo endpoint could not be called successfully")
 		}
 	}()
 
-	input := NewSuccessMessage("Hello world.", nil)
+	input := NewSuccessMessage("Hello world.")
 
 	ms := GetMicroservice("utils")
 	if ms == nil {
 		panic("no microservice was returned by GetMicroservice")
 	}
-	response, err := ms.Call("echo", input)
+
+	var response *Message
+	var err error
+
+	start := time.Now()
+	for i := 0; i < 2; i++ {
+		response, err = ms.Call("echo", input)
+	}
+	elapsed := time.Since(start)
+
+	log.Printf(" - 2 calls in %s", elapsed)
 
 	if err != nil {
 		panic(err)
@@ -100,17 +112,70 @@ func TestCallMicroserviceMessage(t *testing.T) {
 	}
 }
 
+func TestGoMicroserviceMessage(t *testing.T) {
+	log.Println(t.Name())
+	defer func() {
+		err := recover()
+		if err != nil {
+			log.Println(err)
+			t.Error("echo endpoint could not be called successfully")
+		}
+	}()
+
+	ms := GetMicroservice("utils")
+	if ms == nil {
+		panic("no microservice was returned by GetMicroservice")
+	}
+
+	var response *Message
+	var err error
+	var chMsg []chan *GoMessage
+	var numberOfCalls = 1000
+
+	start := time.Now()
+	for i := 0; i < numberOfCalls; i++ {
+		input := NewSuccessMessage("Hello world " + strconv.Itoa(i+1))
+		chMsg = append(chMsg, ms.Go("echo", input))
+	}
+
+	for i := 0; i < len(chMsg); i++ {
+		response, err = ReadGoMessage(chMsg[i])
+		close(chMsg[i])
+	}
+	elapsed := time.Since(start)
+
+	log.Printf(" - "+strconv.Itoa(numberOfCalls)+" calls in %s", elapsed)
+
+	if err != nil {
+		panic(err)
+	}
+
+	if response.Text == "" {
+		panic("response text did not return as expected")
+	}
+}
+
 func TestLobMicroserviceMessage(t *testing.T) {
 	log.Println(t.Name())
 	defer func() {
 		err := recover()
 		if err != nil {
+			t.Error(err)
 			t.Error("Echo endpoint could not be called successfully.")
 		}
 	}()
 
 	input := NewSuccessMessage("Hello world.", nil)
-	err := App.Microservices["utils"].Lob("echo", input)
+
+	var err error
+
+	start := time.Now()
+	for i := 0; i < 10; i++ {
+		err = App.Microservices["utils"].Lob("echo", input)
+	}
+	elapsed := time.Since(start)
+
+	log.Printf(" - 10 calls in %s", elapsed)
 
 	if err != nil {
 		panic(err)
