@@ -12,14 +12,15 @@ import (
 
 // SocketIO Server
 var ioServer *io.Server
+var ioTransport *transport.WebsocketTransport
 
 func init() {
 	// Transport configuration
-	transport := transport.GetDefaultWebsocketTransport()
-	transport.UnsecureTLS = true
+	ioTransport = transport.GetDefaultWebsocketTransport()
 
 	// SocketIO Server
-	ioServer = io.NewServer(transport)
+	ioTransport.UnsecureTLS = true
+	ioServer = io.NewServer(ioTransport)
 }
 
 // Startup activates the framework and starts the server
@@ -50,6 +51,16 @@ func Startup(config map[string]interface{}) {
 
 	if config["host"] != nil {
 		address = config["host"].(string) + address
+	}
+
+	if config["rejectInvalidHostnames"] != nil {
+		ioTransport.UnsecureTLS = !config["rejectInvalidHostnames"].(bool)
+		ioServer.UpdateTransport(ioTransport)
+	}
+
+	if config["enableCORS"] != nil {
+		corsDomain := config["enableCORS"].(string)
+		ioServer.EnableCORS(corsDomain)
 	}
 
 	/*** END CONFIG ***/
