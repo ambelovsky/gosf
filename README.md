@@ -1,6 +1,8 @@
 # Go Socket.IO Framework (GOSF)
 Go Socket.IO Framework or GOSF is an easy-to-use framework for developing Socket.IO API's in Google's Go language (GoLang).
 
+Support ongoing development efforts with a transfer to BTC wallet 13pkXi8bW5bKjWewQYtv36CUgwhgQEn7eA
+
 **Supports Socket.IO Version 2**
 
 An example server to help you get started can be found at [github.com/ambelovsky/gosf-sample-app](https://github.com/ambelovsky/gosf-sample-app).

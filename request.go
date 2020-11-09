@@ -48,6 +48,12 @@ func (request Request) respond(client *Client, response *Message) *Message {
 		if &request.Message.ID != nil {
 			response.ID = request.Message.ID
 		}
+		if &request.Message.GUID != nil {
+			response.GUID = request.Message.GUID
+		}
+		if &request.Message.UUID != nil {
+			response.UUID = request.Message.UUID
+		}
 
 		client.channel.Emit(request.Endpoint, response)
 		return response

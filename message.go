@@ -2,7 +2,9 @@ package gosf
 
 // Message - Standard message type for Socket communications
 type Message struct {
-	ID int `json:"id,omitempty"`
+	ID   int    `json:"id,omitempty"`
+	GUID string `json:"guid,omitempty"`
+	UUID string `json:"uuid,omitempty"`
 
 	Success bool   `json:"success"`
 	Text    string `json:"text,omitempty"`
